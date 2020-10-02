@@ -110,7 +110,9 @@ world <- get_stamenmap(
 
 ggmap(world) + 
   geom_point(data = Starbucks, 
-             aes(x = Longitude, y = Latitude,  color = `Ownership Type`), 
+             aes(x = Longitude, 
+                 y = Latitude,  
+                 color = `Ownership Type`), 
              alpha = .3, 
              size = .1) +
   theme_map()+
@@ -129,7 +131,9 @@ Twin_Cities <- get_stamenmap(
 
 ggmap(Twin_Cities) +
   geom_point(data = Starbucks, 
-             aes(x = Longitude, y = Latitude, color = `Ownership Type` )) +
+             aes(x = Longitude, 
+                 y = Latitude, 
+                 color = `Ownership Type` )) +
   theme_map() +
   theme(legend.backgroun = element_blank())
 ```
@@ -165,8 +169,12 @@ Twin_Cities <- get_stamenmap(
 ggmap(Twin_Cities) +
   geom_point(data = Starbucks, 
              aes(x = Longitude, y = Latitude)) +
-  geom_point(aes(x=-93.17, y=44.94, color = "red")) +
-  annotate('text', x=-93.17, y=44.945, label = 'Macalester College', color = I('red'), size = 1.75) +
+  geom_point(aes(x = -93.17, y = 44.94, color = "red")) +
+  annotate('text', x = -93.17, 
+           y = 44.945, 
+           label = 'Macalester College', 
+           color = I('red'), 
+           size = 1.75) +
   theme_map() +
   theme(legend.position = "") 
 ```
@@ -239,9 +247,19 @@ starbucks_with_2018_pop_est %>%
 favorite_places_alison <- tibble(
   place = c("Saint Paul Home", "Trader Joe's", 
             "Minneapolis Beach_fav", "Simplicitea",
-            "Starbucks", "Minnehaha Falls", "Como Conservatory",  "Chicago Home",  "La Michocana-Pilsen_fav", "Garfield Conservatory", "Lake Michigan Pennisula_fav" ),
-  long = c (-93.1676242,  -93.1480801, -93.2025663,  -93.1690109, -93.1900947, -93.2170517, -93.1536019, -87.7230868, -87.6636352,-87.7194441, -87.5816686),
-  lat = c(44.9320812, 44.926697, 44.9408164, 44.9330547, 44.917551, 44.9142661, 44.9823653, 41.6973502, 41.856589, 41.8862729, 41.7930772)) %>%
+            "Starbucks", "Minnehaha Falls", 
+            "Como Conservatory",  "Chicago Home",  
+            "La Michocana-Pilsen_fav", 
+            "Garfield Conservatory", 
+            "Lake Michigan Pennisula_fav" ),
+  long = c (-93.1676242,  -93.1480801, -93.2025663,
+            -93.1690109, -93.1900947, -93.2170517,
+            -93.1536019, -87.7230868,-87.6636352,
+            -87.7194441, -87.5816686),
+  lat = c(44.9320812, 44.926697, 44.9408164, 
+          44.9330547, 44.917551, 44.9142661, 
+          44.9823653, 41.6973502, 41.856589, 
+          41.8862729, 41.7930772)) %>%
   mutate(favorite_place = str_detect(place, "_fav"))
 ```
   
@@ -321,8 +339,7 @@ WashingtonDC <- get_stamenmap(
     maptype = "terrain",
     zoom = 11)
 
-Prop_Casual <-
-  Trips %>%
+Prop_Casual <- Trips %>%
   group_by(sstation, client) %>%
   summarize(n = n()) %>%
   mutate(prop = n/sum(n)) %>%
@@ -332,8 +349,11 @@ Prop_Casual <-
 
 ggmap(WashingtonDC) +
   geom_point(data = Prop_Casual, 
-             aes(x= long, y= lat, color = prop, 
-             size = prop), alpha = 0.75)+
+             aes(x= long, 
+                 y= lat, 
+                 color = prop, 
+                 size = prop), 
+             alpha = 0.75)+
   scale_color_viridis_c(option = "viridis")+
   theme_map()
 ```
@@ -396,7 +416,10 @@ latest_covid19_10000 %>%
   As more time goes on, states have a higher number of Covid-19 cases per 10,000 people. 
 ```{r}
 covid_19_dates <- covid19 %>%
-  filter(date %in% c(as.Date("2020-02-24"), as.Date("2020-05-24"), as.Date("2020-07-24"), as.Date("2020-09-24"))) %>%
+  filter(date %in% c(as.Date("2020-02-24"),
+                     as.Date("2020-05-24"),
+                     as.Date("2020-07-24"),
+                     as.Date("2020-09-24"))) %>%
   filter(!`state` %in% c("alaska", "hawaii", "guam", "virgin islands", "puerto rico", "northern mariana islands")) %>%
   mutate(state = str_to_lower(state)) %>%
   left_join(census_pop_est_2018) %>%
@@ -441,8 +464,10 @@ pal <-
   
 
 leaflet(MplsStops, options = leafletOptions(preferCanvas = TRUE)) %>%
-  addProviderTiles(providers$OpenStreetMap, options = providerTileOptions(updateWhenZooming = FALSE, updateWhileIdle = TRUE)) %>%
-  addCircleMarkers(stroke = FALSE, radius = 2, color = ~pal(problem)) %>%
+addProviderTiles(providers$OpenStreetMap, options = providerTileOptions(updateWhenZooming = FALSE, updateWhileIdle = TRUE)) %>%
+addCircleMarkers(stroke = FALSE, 
+                 radius = 2, 
+                 color = ~pal(problem)) %>%
   addLegend(position = "bottomright",
             pal = pal, 
             values = ~problem,
@@ -474,7 +499,7 @@ pal2 <- colorNumeric("inferno",
                      domain = mpls_all$prop_sus)
 
 leaflet(mpls_all, options = leafletOptions(preferCanvas = TRUE)) %>%
-  addProviderTiles(providers$OpenStreetMap, options = providerTileOptions(updateWhenZooming = FALSE, updateWhileIdle = TRUE)) %>%
+addProviderTiles(providers$OpenStreetMap, options = providerTileOptions(updateWhenZooming = FALSE, updateWhileIdle = TRUE)) %>%
 addPolygons(fillColor = ~pal2(prop_sus),
               stroke = FALSE,
               fillOpacity = .7,
@@ -503,7 +528,7 @@ pal3 <- colorNumeric("magma",
                     domain = mpls_all$poverty)
   
 leaflet(mpls_all, options = leafletOptions(preferCanvas = TRUE)) %>%
-  addProviderTiles(providers$OpenStreetMap, options = providerTileOptions(updateWhenZooming = FALSE, updateWhileIdle = TRUE)) %>%
+addProviderTiles(providers$OpenStreetMap, options = providerTileOptions(updateWhenZooming = FALSE, updateWhileIdle = TRUE)) %>%
 addPolygons(fillColor = ~pal3(poverty),
               stroke = FALSE,
               fillOpacity = .7,
